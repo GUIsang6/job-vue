@@ -24,3 +24,7 @@ export const checkGetJobService = (data) => {
 export const checkPostJobService = (data) => {
   return request.post('/admin/checkPostJob', data)
 }
+//升级会员
+export const checkVipService = (data) => {
+  return request.post('/user/update', data)
+}

@@ -17,7 +17,8 @@ const pagination = ref({
   pageNum: 1,
   pageSize: 100,
   userId: '',
-  fuzzySearch: ''
+  fuzzySearch: '',
+  state: ''
 }) //分页参数
 const postJobList = ref([])
 const getPostJobList = async () => {

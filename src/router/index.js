@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores'
+import { ElMessage } from 'element-plus'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,10 +41,26 @@ const router = createRouter({
         {
           path: 'checkPostJob',
           component: () => import('@/views/admin/check/CheckPostJob.vue')
+        },
+        {
+          path: 'checkVip',
+          component: () => import('@/views/admin/check/CheckVip.vue')
         }
       ]
     }
   ]
 })
-
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore()
+  const userinfo = userStore.userInfo
+  const token = userStore.token
+  const whiteList = ['/', '/workhome', '/jobhome'] // 不需要登录就可以访问的页面的路由路径
+  console.log(userinfo)
+  if (!token && !whiteList.includes(to.path)) {
+    next('/')
+    ElMessage.error('请先登录注册')
+  } else {
+    next()
+  }
+})
 export default router

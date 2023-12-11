@@ -266,7 +266,7 @@ const deleteUser = async (id) => {
           <el-select v-model="editUser.role">
             <el-option label="求职者" :value="1"></el-option>
             <el-option label="招聘者" :value="2"></el-option>
-            <el-option disabled label="管理员" :value="0"></el-option>
+            <el-option label="管理员" :value="0"></el-option>
           </el-select>
         </el-form-item>
       </el-form>

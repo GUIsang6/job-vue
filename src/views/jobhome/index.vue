@@ -51,7 +51,8 @@ const resetSearch = () => {
     userId: '',
     fuzzySearch: '',
     Category: '',
-    sort: ''
+    sort: '',
+    state: '1'
   }
   getJobList()
   ElMessage.success('重置成功')

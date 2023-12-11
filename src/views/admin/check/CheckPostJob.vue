@@ -44,7 +44,8 @@ const resetSearch = () => {
     userId: '',
     fuzzySearch: '',
     Category: '',
-    sort: ''
+    sort: '',
+    state: ''
   }
   getJobList()
   ElMessage.success('重置成功')
@@ -86,7 +87,7 @@ const closeGetJob = async (row) => {
     <el-form inline v-model="pagination">
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-form-item label="用户角色" class="vertical-center">
+          <el-form-item label="审核状态" class="vertical-center">
             <el-select
               v-model="pagination.role"
               class="m-2"

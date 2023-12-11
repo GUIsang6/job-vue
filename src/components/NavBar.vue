@@ -74,7 +74,7 @@ onMounted(async () => {
     userStore.getUserInfo()
   }
 })
-const userInfo = ref(userStore.userInfo)
+const userInfo = userStore.userInfo
 </script>
 
 <template>
@@ -96,6 +96,20 @@ const userInfo = ref(userStore.userInfo)
     <div class="flex-grow" />
     <el-sub-menu v-if="userStore.token" index="/user">
       <template #title>
+        <el-tag
+          v-if="userInfo.vip === 0"
+          type="warning"
+          size="large"
+          style="margin-right: 10px"
+          >普通会员
+        </el-tag>
+        <el-tag
+          v-if="userInfo.vip === 1"
+          type="success"
+          size="large"
+          style="margin-right: 10px"
+          >高级会员
+        </el-tag>
         <img style="width: 50px" :src="userInfo.avatar" />
         <span>{{ userInfo.username }}</span>
       </template>

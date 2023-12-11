@@ -9,13 +9,9 @@ import {
 import { useUserStore } from '@/stores'
 import { Plus } from '@element-plus/icons-vue'
 const router = useRouter()
-const {
-  userInfo: { username, nickname, email, avatar },
-  getUserInfo
-} = useUserStore()
+const { getUserInfo } = useUserStore()
 const userStore = useUserStore()
-const userInfo = ref({ username, nickname, email, avatar })
-
+const userInfo = userStore.userInfo
 const editInfo = ref(false)
 
 const editPassword = ref(false) //修改密码
@@ -37,7 +33,7 @@ const onUploadFile = (file) => {
   imageUrl.value = URL.createObjectURL(file.raw)
   // 保存文件
   imgFile.value = file.raw
-  console.log('初步上传', userInfo.value)
+  console.log('初步上传', userInfo)
 }
 
 const updateUserInfo = async () => {
@@ -49,14 +45,26 @@ const updateUserInfo = async () => {
   // 上传文件
   const res = await updateAvatarService(imgFile.value)
   console.log('sad', res.data.data)
-  userInfo.value.avatar = res.data.data
-  console.log(userInfo.value)
-  console.log('图片上传后更新的', userInfo.value)
-  await updateUserInfoService(userInfo.value)
+  userInfo.avatar = res.data.data
+  console.log(userInfo)
+  console.log('图片上传后更新的', userInfo)
+  await updateUserInfoService(userInfo)
   editInfo.value = false
   ElMessage.success('更新用户信息成功')
   getUserInfo()
   router.push('/')
+}
+const comeVip = async () => {
+  await ElMessageBox.confirm('确认充值vip会员吗', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    draggable: true,
+    type: 'success'
+  })
+  userInfo.vip = 2
+  console.log('充值会员', userInfo)
+  await updateUserInfoService(userInfo)
+  getUserInfo()
 }
 </script>
 
@@ -66,7 +74,9 @@ const updateUserInfo = async () => {
       <template #header>
         <div class="card-header">
           <span>用户信息</span>
-          <el-button>充值vip</el-button>
+          <el-button @click="comeVip()" v-if="userInfo.vip === 0"
+            >充值vip</el-button
+          >
           <el-button type="success" @click="editPassword = true"
             >修改密码
           </el-button>

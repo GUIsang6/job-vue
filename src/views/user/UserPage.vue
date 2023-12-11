@@ -1,7 +1,19 @@
 <script setup>
 // import { ref, onMounted } from 'vue'
 // import { useUserStore } from '@/stores'
-import { ChatRound } from '@element-plus/icons-vue'
+import {
+  EditPen,
+  Setting,
+  Document,
+  ZoomOut,
+  ZoomIn,
+  ElementPlus,
+  Aim,
+  User
+} from '@element-plus/icons-vue'
+import { useUserStore } from '@/stores'
+const userStore = useUserStore()
+const userinfo = userStore.userInfo
 // const userStore = useUserStore()
 </script>
 
@@ -17,32 +29,36 @@ import { ChatRound } from '@element-plus/icons-vue'
         @close="handleClose"
       >
         <el-menu-item index="/user/userinfo">
-          <el-icon><setting /></el-icon>
+          <el-icon><Setting /></el-icon>
           <span>用户信息</span>
         </el-menu-item>
-        <el-menu-item v-if="1" index="/user/getjob">
-          <el-icon><ChatRound /></el-icon>
+        <el-menu-item v-if="userinfo.role !== 2" index="/user/getjob">
+          <el-icon><EditPen /></el-icon>
           <span>求职信息</span>
         </el-menu-item>
-        <el-menu-item v-if="1" index="/user/resume">
-          <el-icon><document /></el-icon>
+        <el-menu-item v-if="userinfo.role !== 2" index="/user/resume">
+          <el-icon><Document /></el-icon>
           <span>我的简历</span>
         </el-menu-item>
-        <el-menu-item v-if="2" index="/user/postjob">
-          <el-icon><setting /></el-icon>
+        <el-menu-item v-if="userinfo.role !== 1" index="/user/postjob">
+          <el-icon><Aim /></el-icon>
           <span>发布招聘</span>
         </el-menu-item>
-        <el-menu-item v-if="1" index="/user/personnel">
-          <el-icon><setting /></el-icon>
+        <el-menu-item v-if="userinfo.role === 0" index="/user/personnel">
+          <el-icon><User /></el-icon>
           <span>用户管理</span>
         </el-menu-item>
-        <el-menu-item v-if="1" index="/user/checkGetJob">
-          <el-icon><setting /></el-icon>
+        <el-menu-item v-if="userinfo.role === 0" index="/user/checkGetJob">
+          <el-icon><ZoomIn /></el-icon>
           <span>求职审核</span>
         </el-menu-item>
-        <el-menu-item v-if="1" index="/user/checkPostJob">
-          <el-icon><setting /></el-icon>
+        <el-menu-item v-if="userinfo.role === 0" index="/user/checkPostJob">
+          <el-icon><ZoomOut /></el-icon>
           <span>招聘审核</span>
+        </el-menu-item>
+        <el-menu-item v-if="userinfo.role === 0" index="/user/checkVip">
+          <el-icon><ElementPlus /></el-icon>
+          <span>会员审核</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
