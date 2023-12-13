@@ -30,12 +30,13 @@ const submitForm = async () => {
         userStore.setToken(res.data.data) // 存储token
         loginDrawer.value = false
         yesValue.value = false
+        userStore.getUserInfo()
         // router.push('/')
-        //未解决登录后页面刷新问题
-        window.location.reload(true)
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        // 登录成功后执行页面刷新
-        window.location.reload(true) // 传递参数 true 表示强制从服务器重新加载页面
+        // //未解决登录后页面刷新问题
+        // window.location.reload(true)
+        // await new Promise((resolve) => setTimeout(resolve, 1000))
+        // // 登录成功后执行页面刷新
+        // window.location.reload(true) // 传递参数 true 表示强制从服务器重新加载页面
         console.log('登录用户:', res)
         router.push('/')
       } catch (error) {
@@ -74,7 +75,6 @@ onMounted(async () => {
     userStore.getUserInfo()
   }
 })
-const userInfo = userStore.userInfo
 </script>
 
 <template>
@@ -97,21 +97,21 @@ const userInfo = userStore.userInfo
     <el-sub-menu v-if="userStore.token" index="/user">
       <template #title>
         <el-tag
-          v-if="userInfo.vip === 0"
+          v-if="userStore.userInfo.vip === 0"
           type="warning"
           size="large"
           style="margin-right: 10px"
           >普通会员
         </el-tag>
         <el-tag
-          v-if="userInfo.vip === 1"
+          v-if="userStore.userInfo.vip === 1"
           type="success"
           size="large"
           style="margin-right: 10px"
           >高级会员
         </el-tag>
-        <img style="width: 50px" :src="userInfo.avatar" />
-        <span>{{ userInfo.username }}</span>
+        <img style="width: 50px" :src="userStore.userInfo.avatar" />
+        <span>{{ userStore.userInfo.username }}</span>
       </template>
       <el-menu-item index="/user">个人中心</el-menu-item>
       <el-menu-item @click="logout()">退出登录</el-menu-item>

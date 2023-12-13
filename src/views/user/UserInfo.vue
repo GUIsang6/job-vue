@@ -1,17 +1,14 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import {
   updateUserInfoService,
   updatePasswordService,
   updateAvatarService
 } from '@/api/user'
 import { useUserStore } from '@/stores'
+import router from 'vue-router'
 import { Plus } from '@element-plus/icons-vue'
-const router = useRouter()
-const { getUserInfo } = useUserStore()
 const userStore = useUserStore()
-const userInfo = userStore.userInfo
 const editInfo = ref(false)
 
 const editPassword = ref(false) //修改密码
@@ -23,7 +20,10 @@ const passwordForm = ref({
 const updatePassword = async () => {
   await updatePasswordService(passwordForm.value)
   editPassword.value = false
-  ElMessage.success('更新密码成功')
+  ElMessage.success('更新密码成功，即将重新登录')
+  router.push('/')
+  userStore.token = ''
+  userStore.userInfo = {}
 }
 const imageUrl = ref(userStore.userInfo.avatar)
 const imgFile = ref()
@@ -33,7 +33,7 @@ const onUploadFile = (file) => {
   imageUrl.value = URL.createObjectURL(file.raw)
   // 保存文件
   imgFile.value = file.raw
-  console.log('初步上传', userInfo)
+  console.log('初步上传', userStore.userInfo)
 }
 
 const updateUserInfo = async () => {
@@ -45,14 +45,13 @@ const updateUserInfo = async () => {
   // 上传文件
   const res = await updateAvatarService(imgFile.value)
   console.log('sad', res.data.data)
-  userInfo.avatar = res.data.data
-  console.log(userInfo)
-  console.log('图片上传后更新的', userInfo)
-  await updateUserInfoService(userInfo)
+  userStore.userInfo.avatar = res.data.data
+  console.log(userStore.userInfo)
+  console.log('图片上传后更新的', userStore.userInfo)
+  await updateUserInfoService(userStore.userInfo)
   editInfo.value = false
   ElMessage.success('更新用户信息成功')
-  getUserInfo()
-  router.push('/')
+  userStore.getUserInfo()
 }
 const comeVip = async () => {
   await ElMessageBox.confirm('确认充值vip会员吗', '提示', {
@@ -61,10 +60,11 @@ const comeVip = async () => {
     draggable: true,
     type: 'success'
   })
-  userInfo.vip = 2
-  console.log('充值会员', userInfo)
-  await updateUserInfoService(userInfo)
-  getUserInfo()
+  userStore.userInfo.vip = 2
+  console.log('充值会员', userStore.userInfo)
+  await updateUserInfoService(userStore.userInfo)
+  userStore.getUserInfo()
+  ElMessage.success('申请成功，等待管理员审核')
 }
 </script>
 
@@ -74,7 +74,7 @@ const comeVip = async () => {
       <template #header>
         <div class="card-header">
           <span>用户信息</span>
-          <el-button @click="comeVip()" v-if="userInfo.vip === 0"
+          <el-button @click="comeVip()" v-if="userStore.userInfo.vip === 0"
             >充值vip</el-button
           >
           <el-button type="success" @click="editPassword = true"
@@ -84,18 +84,18 @@ const comeVip = async () => {
       </template>
       <el-form
         label-position="top"
-        :model="userInfo"
+        :model="userStore.userInfo"
         label-width="120px"
         size="large"
       >
         <el-form-item label="用户名">
-          <el-input v-model="userInfo.username" disabled></el-input>
+          <el-input v-model="userStore.userInfo.username" disabled></el-input>
         </el-form-item>
         <el-form-item label="昵称" disabled prop="nickname">
-          <el-input v-model="userInfo.nickname"></el-input>
+          <el-input v-model="userStore.userInfo.nickname"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
-          <el-input v-model="userInfo.email"></el-input>
+          <el-input v-model="userStore.userInfo.email"></el-input>
         </el-form-item>
         <el-form-item label="头像" prop="avatar">
           <el-col :span="12">
