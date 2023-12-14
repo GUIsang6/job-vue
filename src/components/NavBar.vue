@@ -127,7 +127,7 @@ onMounted(async () => {
     </el-menu-item>
   </el-menu>
   <div class="h-6" />
-  <el-drawer v-model="loginDrawer" :direction="direction">
+  <el-drawer v-model="loginDrawer" :direction="direction" size="500">
     <el-row>
       <el-image
         style="width: 100px; height: 100px"

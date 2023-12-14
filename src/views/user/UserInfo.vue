@@ -6,7 +6,7 @@ import {
   updateAvatarService
 } from '@/api/user'
 import { useUserStore } from '@/stores'
-import router from 'vue-router'
+// import router from 'vue-router'
 import { Plus } from '@element-plus/icons-vue'
 const userStore = useUserStore()
 const editInfo = ref(false)
@@ -21,7 +21,7 @@ const updatePassword = async () => {
   await updatePasswordService(passwordForm.value)
   editPassword.value = false
   ElMessage.success('更新密码成功，即将重新登录')
-  router.push('/')
+  // router.push('/')
   userStore.token = ''
   userStore.userInfo = {}
 }
